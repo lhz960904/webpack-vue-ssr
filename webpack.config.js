@@ -1,6 +1,8 @@
 const path = require('path')
+const webpack = require('webpack')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+// var DashboardPlugin = require('webpack-dashboard/plugin');
 
 const resolve = dir => path.resolve(__dirname, dir)
 
@@ -66,15 +68,28 @@ module.exports = {
       }
     ]
   },
+  resolve: {
+    alias: {
+      'components': resolve('src/components'),
+      'assets': resolve('src/assets')
+    },
+    extensions: ['.js', '.vue'],
+  },
   plugins: [
     new VueLoaderPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       template: resolve('./index.html')
     })
   ],
+  optimization: {
+    
+  },
   devServer: {
-    // contentBase: path.join(__dirname, "dist"),
-    // compress: true,
+    contentBase: path.join(__dirname, "dist"),
+    compress: true,
+    clientLogLevel: 'none',
+    host: '0.0.0.0',
     port: 8080,
     hot: true
   }

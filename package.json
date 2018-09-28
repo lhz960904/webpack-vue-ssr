@@ -6,8 +6,8 @@
   "author": "lihaozecq@gmail.com",
   "license": "MIT",
   "scripts": {
-    "dev": "webpack-dev-server --hot --inline --mode=development",
-    "webpack": "webpack --config webpack.config.js --mode=development"
+    "dev": "webpack-dev-server --progress --mode=development",
+    "build": "webpack --config webpack.config.js --mode=development"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",
