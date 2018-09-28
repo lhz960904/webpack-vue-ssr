@@ -6,14 +6,13 @@
 export default {
   data () {
     return {
-      msg: 'Hessssssss'
+      msg: 'hello world!'
     }
   }
 }
 </script>
 
-<style>
-.example {
-  color: red;
-}
+<style lang="stylus">
+.example
+  color: red
 </style>
