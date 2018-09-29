@@ -1,8 +1,10 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const createVueLoaderOptions = require('./vue-loader.conf')
 
 const resolve = dir => path.resolve(__dirname, '..', dir)
+const isDev = process.env.NODE_ENV === 'development'
 
 module.exports = {
   entry: resolve('src/main.js'),
@@ -33,7 +35,8 @@ module.exports = {
       },
       {
         test: /\.vue$/,
-        loader: 'vue-loader'
+        loader: 'vue-loader',
+        options: createVueLoaderOptions(isDev)
       }
     ]
   },

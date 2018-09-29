@@ -7,7 +7,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.dev.conf.js",
-    "build": "cross-env NODE_ENV=production webpack --config build/webpack.prod.conf.js"
+    "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.prod.conf.js",
+    "build": "npm run clean && npm run build:client",
+    "clean": "rimraf dist"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",
@@ -23,6 +25,7 @@
     "postcss-import": "^12.0.0",
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.0.6",
+    "rimraf": "^2.6.2",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "url-loader": "^1.1.1",

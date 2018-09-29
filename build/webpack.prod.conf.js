@@ -13,7 +13,7 @@ module.exports = merge(baseConfig, {
       {
         test: /\.styl(us)?$/,
         use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
+          fallback: 'vue-style-loader',
           use: [
             {
               loader: 'css-loader',
