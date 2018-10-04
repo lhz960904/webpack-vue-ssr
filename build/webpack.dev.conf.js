@@ -3,7 +3,6 @@ const merge = require('webpack-merge')
 const baseConfig = require('./webpack.base.conf')
 
 module.exports = merge(baseConfig, {
-  mode: 'development',
   devtool: '#cheap-module-eval-source-map',
   module: {
     rules: [
@@ -13,7 +12,9 @@ module.exports = merge(baseConfig, {
           'vue-style-loader',
           {
             loader: 'css-loader',
-            options: { importLoaders: 1 }
+            options: {
+              importLoaders: 1
+            }
           },
           'postcss-loader',
           'stylus-loader'

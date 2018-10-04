@@ -5,6 +5,7 @@ import 'assets/styles/common.styl'
 import 'assets/images/back.jpg'
 import 'assets/images/code.png'
 
+/* eslint-disable */
 new Vue({
   el: '#app',
   render: h => h(App)

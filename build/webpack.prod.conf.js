@@ -4,7 +4,6 @@ const baseConfig = require('./webpack.base.conf')
 const ExtractTextPlugin = require("extract-text-webpack-plugin")
 
 module.exports = merge(baseConfig, {
-  mode: 'production',
   output: {
     filename: '[name].[hash:8].js'
   },
@@ -25,6 +24,12 @@ module.exports = merge(baseConfig, {
         })
       }
     ]
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    },
+    runtimeChunk: true
   },
   plugins: [
     new ExtractTextPlugin('styles.css')

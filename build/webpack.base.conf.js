@@ -7,6 +7,7 @@ const resolve = dir => path.resolve(__dirname, '..', dir)
 const isDev = process.env.NODE_ENV === 'development'
 
 module.exports = {
+  mode: process.env.NODE_ENV || 'production',
   entry: resolve('src/main.js'),
   output: {
     path: resolve('dist'),
@@ -37,6 +38,12 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: createVueLoaderOptions(isDev)
+      },
+      {
+        test: /\.(vue|js)$/,
+        loader: 'eslint-loader',
+        exclude: /node_modules/,
+        enforce: 'pre'
       }
     ]
   },
