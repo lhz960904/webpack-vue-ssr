@@ -1,13 +1,20 @@
+const path = require('path')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
 const baseConfig = require('./webpack.base.conf')
 const ExtractTextPlugin = require("extract-text-webpack-plugin")
+const VueServerPlugin = require('vue-server-renderer/server-plugin')
 
 module.exports = merge(baseConfig, {
+  target: 'node',
+  entry: path.resolve(__dirname, '../src/server-entry.js'),
   output: {
-    filename: '[name].[hash:8].js',
-    publicPath: '/dist/'
+    libraryTarget: 'commonjs2',
+    filename: 'server-rentry.js',
+    path: path.resolve(__dirname, '../server-dist')
   },
+  devtool: 'source-map',
+  externals: Object.keys(require('../package.json').dependencies),
   module: {
     rules: [
       {
@@ -26,13 +33,12 @@ module.exports = merge(baseConfig, {
       }
     ]
   },
-  optimization: {
-    splitChunks: {
-      chunks: 'all'
-    },
-    runtimeChunk: true
-  },
   plugins: [
-    new ExtractTextPlugin('styles.css')
+    new ExtractTextPlugin('styles.[hash:8].css'),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+      'process.env.VUE_ENV': '"server"'
+    }),
+    new VueServerPlugin()
   ]
 })

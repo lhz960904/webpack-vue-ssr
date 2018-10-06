@@ -6,12 +6,15 @@
   "author": "lihaozecq@gmail.com",
   "license": "MIT",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.dev.conf.js",
+    "dev:client": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.dev.conf.js",
     "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.prod.conf.js",
-    "build": "npm run clean && npm run build:client",
+    "build:server": "cross-env NODE_ENV=production webpack --config build/webpack.server.conf.js",
+    "build": "npm run clean && npm run build:client && npm run build:server",
     "lint": "eslint --ext .js --ext .vue src/",
-    "clean": "rimraf dist",
-    "precommit": "yarn run lint"
+    "clean": "rimraf dist && rimraf server-dist",
+    "precommit": "yarn run lint",
+    "dev:server": "nodemon server/index.js",
+    "start": "cross-env NODE_ENV=production node server/index.js"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",
@@ -32,11 +35,14 @@
     "eslint-plugin-standard": "^4.0.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^2.0.0",
-    "html-webpack-plugin": "^3.2.0",
+    "html-webpack-plugin": "^4.0.0-beta.1",
+    "memory-fs": "^0.4.1",
+    "nodemon": "^1.18.4",
     "postcss-import": "^12.0.0",
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.0.6",
     "rimraf": "^2.6.2",
+    "style-loader": "^0.23.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "url-loader": "^1.1.1",
@@ -49,7 +55,15 @@
     "webpack-merge": "^4.1.4"
   },
   "dependencies": {
-    "style-loader": "^0.23.0",
-    "vue": "^2.5.17"
+    "axios": "^0.18.0",
+    "ejs": "^2.6.1",
+    "koa": "^2.5.3",
+    "koa-router": "^7.4.0",
+    "koa-send": "^5.0.0",
+    "vue": "^2.5.17",
+    "vue-meta": "^1.5.5",
+    "vue-router": "^3.0.1",
+    "vue-server-renderer": "^2.5.17",
+    "vuex": "^3.0.1"
   }
 }

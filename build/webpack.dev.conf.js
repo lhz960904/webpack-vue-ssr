@@ -1,6 +1,11 @@
+const path = require('path')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
 const baseConfig = require('./webpack.base.conf')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+
+
+const resolve = dir => path.resolve(__dirname, '..', dir)
 
 module.exports = merge(baseConfig, {
   devtool: '#cheap-module-eval-source-map',
@@ -24,7 +29,9 @@ module.exports = merge(baseConfig, {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
+    new HtmlWebpackPlugin({
+      template: resolve('index.html')
+    })
   ],
   devServer: {
     port: 8080,
@@ -32,6 +39,9 @@ module.exports = merge(baseConfig, {
     overlay: {
       errors: true
     },
-    hot: true
+    hot: true,
+    historyApiFallback: {
+      index: '/index.html'
+    }
   }
 })

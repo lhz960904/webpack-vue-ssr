@@ -1,17 +1,18 @@
 const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const createVueLoaderOptions = require('./vue-loader.conf')
+const VueclientPlugin = require('vue-server-renderer/client-plugin')
 
 const resolve = dir => path.resolve(__dirname, '..', dir)
 const isDev = process.env.NODE_ENV === 'development'
 
 module.exports = {
   mode: process.env.NODE_ENV || 'production',
-  entry: resolve('src/main.js'),
+  entry: resolve('src/client-entry.js'),
   output: {
     path: resolve('dist'),
-    filename: 'bundle.[hash:8].js'
+    filename: 'bundle.[hash:8].js',
+    publicPath: 'http://127.0.0.1:8080/'
   },
   module: {
     rules: [
@@ -49,6 +50,7 @@ module.exports = {
   },
   resolve: {
     alias: {
+      'vue': resolve('node_modules/vue/dist/vue.js'),
       'components': resolve('src/components'),
       'assets': resolve('src/assets')
     },
@@ -56,8 +58,6 @@ module.exports = {
   },
   plugins: [
     new VueLoaderPlugin(),
-    new HtmlWebpackPlugin({
-      template: resolve('index.html')
-    })
+    new VueclientPlugin()
   ]
 }
