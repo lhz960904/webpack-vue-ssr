@@ -40,6 +40,9 @@ module.exports = merge(baseConfig, {
       errors: true
     },
     hot: true,
+    headers: {
+      'Access-Control-Allow-Origin': '*'
+    },
     historyApiFallback: {
       index: '/index.html'
     }

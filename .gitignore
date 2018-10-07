@@ -1,4 +1,5 @@
 node_modules/
 dist/
+server-dist/
 server-build
 .DS_Store
