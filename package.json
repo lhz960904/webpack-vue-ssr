@@ -6,11 +6,11 @@
   "author": "lihaozecq@gmail.com",
   "license": "MIT",
   "scripts": {
-    "dev:client": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.dev.conf.js",
+    "dev:client": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.prod.conf.js",
     "build:server": "cross-env NODE_ENV=production webpack --config build/webpack.server.conf.js",
     "build": "npm run clean && npm run build:client && npm run build:server",
-    "lint": "eslint --ext .js --ext .vue src/",
+    "lint": "eslint --ext .js,.vue src",
     "clean": "rimraf dist && rimraf server-dist",
     "precommit": "yarn run lint",
     "dev:server": "nodemon server/index.js",

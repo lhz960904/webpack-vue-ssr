@@ -8,6 +8,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const resolve = dir => path.resolve(__dirname, '..', dir)
 
 module.exports = merge(baseConfig, {
+  mode: 'development',
   devtool: '#cheap-module-eval-source-map',
   module: {
     rules: [
