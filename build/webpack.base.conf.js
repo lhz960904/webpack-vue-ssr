@@ -2,19 +2,20 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 const resolve = dir => path.join(__dirname, '..', dir)
 
-const createLintingRule = () => {
+const createLintingRule = () => ({
   test: /\.(js|vue)$/,
   loader: 'eslint-loader',
-  enforce: 'pre'
+  enforce: 'pre',
   include: [resolve('src')],
   options: {
     // formatter: require('eslint-friendly-formatter'),
     // emitWarning: !config.dev.showEslintErrorsInOverlay
   }
-}
+})
 
 module.exports = {
   // context: path.resolve(__dirname, '../'),
@@ -41,14 +42,12 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: vueLoaderConfig
-      }
+      },
       {
         test: /\.js$/,
-        use: {
-          loader: 'babel-loader',
-          // resolve('node_modules/webpack-dev-server/client')
-          include: [resolve('src')]
-        }
+        loader: 'babel-loader',
+        // resolve('node_modules/webpack-dev-server/client')
+        include: [resolve('src')]
       },
       {
         test: /\.(png|jpe?g|gif|svg)$/, // 处理图片
@@ -72,6 +71,9 @@ module.exports = {
       }
     ]
   },
+  plugins: [
+    new VueLoaderPlugin()
+  ],
   // 配置是否 polyfill 或 mock 某些 Node.js 全局变量和模块
   node: {
     // Vue远吗已经包含了setImmediate
