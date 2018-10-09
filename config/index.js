@@ -14,9 +14,7 @@ module.exports = {
     notifyOnErrors: true,
     poll: false, // 获取文件变化是否采用轮询
     useEslint: true,
-    // If true, eslint errors and warnings will also be shown in the error overlay
-    // in the browser.
-    showEslintErrorsInOverlay: false, // 是否展示到浏览器上
+    showEslintErrorsInOverlay: false,
     devtool: 'cheap-module-eval-source-map',
     // If you have problems debugging vue-files in devtools,
     // set this to false - it *may* help

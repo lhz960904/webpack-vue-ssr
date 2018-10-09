@@ -4,7 +4,7 @@ const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
-const resolve = dir => path.join(__dirname, '..', dir)
+const resolve = dir => path.posix.join(__dirname, '..', dir)
 
 const createLintingRule = () => ({
   test: /\.(js|vue)$/,
@@ -12,13 +12,14 @@ const createLintingRule = () => ({
   enforce: 'pre',
   include: [resolve('src')],
   options: {
-    // formatter: require('eslint-friendly-formatter'),
-    // emitWarning: !config.dev.showEslintErrorsInOverlay
+    // 更友好、更详细的提示
+    formatter: require('eslint-friendly-formatter'),
+    // 只给出警告，开发有很好的体验，emitError会阻止浏览器显示内容
+    emitWarning: !config.dev.showEslintErrorsInOverlay
   }
 })
 
 module.exports = {
-  // context: path.resolve(__dirname, '../'),
   entry: resolve('src/main.js'),
   output: {
     path: config.build.assetsRoot,
@@ -46,7 +47,6 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        // resolve('node_modules/webpack-dev-server/client')
         include: [resolve('src')]
       },
       {
@@ -76,7 +76,7 @@ module.exports = {
   ],
   // 配置是否 polyfill 或 mock 某些 Node.js 全局变量和模块
   node: {
-    // Vue远吗已经包含了setImmediate
+    // Vue源码已经包含了setImmediate
     setImmediate: false,
     // 设置empty是为了防止那些mock Node原生模块来对客户端造成安全问题
     dgram: 'empty',
