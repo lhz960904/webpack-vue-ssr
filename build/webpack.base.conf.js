@@ -1,7 +1,6 @@
 const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
-const vueLoaderConfig = require('./vue-loader.conf')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 const resolve = dir => path.posix.join(__dirname, '..', dir)
@@ -42,12 +41,22 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        options: vueLoaderConfig
+        options: {
+          transformAssetUrls: {
+            video: ['src', 'poster'],
+            source: 'src',
+            img: 'src',
+            image: 'xlink:href'
+          }
+        }
       },
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        include: [resolve('src')]
+        exclude: file => (
+          /node_modules/.test(file) &&
+          !/\.vue\.js/.test(file)
+        )
       },
       {
         test: /\.(png|jpe?g|gif|svg)$/, // 处理图片

@@ -14,6 +14,7 @@ module.exports = merge(baseConfig, {
     path: path.resolve(__dirname, '../server-dist')
   },
   devtool: 'source-map',
+  // https://vue-loader.vuejs.org/zh/migrating.html#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B8%B2%E6%9F%93%E7%9A%84%E4%BE%9D%E8%B5%96%E6%8E%92%E9%99%A4
   externals: Object.keys(require('../package.json').dependencies),
   module: {
     rules: [
