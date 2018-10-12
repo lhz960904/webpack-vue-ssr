@@ -7,18 +7,19 @@ const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-// const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 
 module.exports = merge(baseWebpackConfig, {
   mode: 'production',
   output: {
     path: config.build.assetsRoot,
+    // chunkhash是根据内容生成的hash, 易于缓存
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
   module: {
     rules: utils.styleLoaders({
       sourceMap: config.build.productionSourceMap,
+      // 将css样式单独提取出文件
       extract: true,
       usePostCSS: true
     })
@@ -28,13 +29,7 @@ module.exports = merge(baseWebpackConfig, {
     new MiniCssExtractPlugin({
       filename: utils.assetsPath('css/[name].[contenthash].css'),
       chunkFilename: utils.assetsPath('css/[name].[contenthash].css')
-      // allChunks: true,
     }),
-    // new OptimizeCSSPlugin({
-    //   cssProcessorOptions: config.build.productionSourceMap
-    //     ? { safe: true, map: { inline: false } }
-    //     : { safe: true }
-    // }),
     new HtmlWebpackPlugin({
       filename: config.build.index,
       template: 'index.html',
@@ -43,11 +38,7 @@ module.exports = merge(baseWebpackConfig, {
         removeComments: true,
         collapseWhitespace: true,
         removeAttributeQuotes: true
-        // more options:
-        // https://github.com/kangax/html-minifier#options-quick-reference
-      },
-      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-      // chunksSortMode: 'dependency'
+      }
     }),
     // keep module.id stable when vendor modules does not change
     new webpack.HashedModuleIdsPlugin(),
@@ -60,10 +51,10 @@ module.exports = merge(baseWebpackConfig, {
       }
     ])
   ],
-  optimization: {
-    splitChunks: {
-      chunks: 'all'
-    },
-    runtimeChunk: true
-  },
+  // optimization: {
+  //   splitChunks: {
+  //     chunks: 'all'
+  //   },
+  //   runtimeChunk: true
+  // },
 })
