@@ -21,9 +21,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.store-example {
-  color: red
-}
-</style>

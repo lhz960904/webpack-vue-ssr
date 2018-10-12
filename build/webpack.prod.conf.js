@@ -8,7 +8,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
-module.exports = merge(baseWebpackConfig, {
+const pordWebpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
   output: {
     path: config.build.assetsRoot,
@@ -58,3 +58,5 @@ module.exports = merge(baseWebpackConfig, {
   //   runtimeChunk: true
   // },
 })
+
+module.exports = pordWebpackConfig
