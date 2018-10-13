@@ -1,38 +1,63 @@
+const path = require('path')
+const utils = require('./utils')
 const webpack = require('webpack')
+const config = require('../config')
 const merge = require('webpack-merge')
-const baseConfig = require('./webpack.base.conf')
-const ExtractTextPlugin = require("extract-text-webpack-plugin")
+const baseWebpackConfig = require('./webpack.base.conf')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
-module.exports = merge(baseConfig, {
+const pordWebpackConfig = merge(baseWebpackConfig, {
+  mode: 'production',
   output: {
-    filename: '[name].[hash:8].js',
-    publicPath: '/dist/'
+    path: config.build.assetsRoot,
+    // chunkhash是根据内容生成的hash, 易于缓存
+    filename: utils.assetsPath('js/[name].[chunkhash].js'),
+    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
   module: {
-    rules: [
-      {
-        test: /\.styl(us)?$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'vue-style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              options: { importLoaders: 1 }
-            },
-            'postcss-loader',
-            'stylus-loader'
-          ]
-        })
-      }
-    ]
+    rules: utils.styleLoaders({
+      sourceMap: config.build.productionSourceMap,
+      // 将css样式单独提取出文件
+      extract: true,
+      usePostCSS: true
+    })
   },
-  optimization: {
-    splitChunks: {
-      chunks: 'all'
-    },
-    runtimeChunk: true
-  },
+  devtool: config.build.productionSourceMap ? config.build.devtool : false,
   plugins: [
-    new ExtractTextPlugin('styles.css')
-  ]
+    // webpack4.0版本以上采用MiniCssExtractPlugin 而不使用extract-text-webpack-plugin
+    new MiniCssExtractPlugin({
+      filename: utils.assetsPath('css/[name].[contenthash].css'),
+      chunkFilename: utils.assetsPath('css/[name].[contenthash].css')
+    }),
+    new HtmlWebpackPlugin({
+      filename: config.build.index,
+      template: 'index.html',
+      inject: true,
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      }
+    }),
+    //  当vendor模块不再改变时, 根据模块的相对路径生成一个四位数的hash作为模块id
+    new webpack.HashedModuleIdsPlugin(),
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, '../static'),
+        to: config.build.assetsSubDirectory,
+        ignore: ['.*']
+      }
+    ])
+  ],
+  // 优化相关, 暂时占个位置
+  // optimization: {
+  //   splitChunks: {
+  //     chunks: 'all'
+  //   },
+  //   runtimeChunk: true
+  // },
 })
+
+module.exports = pordWebpackConfig
