@@ -1,4 +1,4 @@
-const ora = require('ora') // 优雅的
+const ora = require('ora') // 优雅的进度提示
 const rm = require('rimraf') // 执行删除操作 相当于 rm -rf
 const path = require('path')
 const chalk = require('chalk') // 控制台字符串颜色

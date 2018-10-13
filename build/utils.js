@@ -13,7 +13,7 @@ exports.assetsPath = function (_path) {
 }
 
 
-// cssloader兼容
+// cssloader兼容各种预处理语言(less|sass|scss|stylus)
 exports.cssLoaders = function (options) {
   options = options || {}
 
@@ -31,7 +31,7 @@ exports.cssLoaders = function (options) {
     }
   }
 
-  // generate loader string to be used with extract text plugin
+  // webpack4.0版本以上采用MiniCssExtractPlugin 而不使用extract-text-webpack-plugin
   function generateLoaders(loader, loaderOptions) {
     const loaders = options.usePostCSS ? [cssLoader, postcssLoader] : [cssLoader]
 
@@ -51,7 +51,6 @@ exports.cssLoaders = function (options) {
     }
   }
 
-  // https://vue-loader.vuejs.org/en/configurations/extract-css.html
   return {
     css: generateLoaders(),
     postcss: generateLoaders(),
@@ -79,6 +78,7 @@ exports.styleLoaders = function (options) {
   return output
 }
 
+//创建友好错误提示的格式
 exports.createNotifierCallback = () => {
   const notifier = require('node-notifier')
 
@@ -92,7 +92,6 @@ exports.createNotifierCallback = () => {
       title: packageConfig.name,
       message: severity + ': ' + error.name,
       subtitle: filename || '',
-      // icon: path.join(__dirname, 'logo.png')
     })
   }
 }

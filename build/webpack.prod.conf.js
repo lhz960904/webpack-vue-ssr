@@ -26,6 +26,7 @@ const pordWebpackConfig = merge(baseWebpackConfig, {
   },
   devtool: config.build.productionSourceMap ? config.build.devtool : false,
   plugins: [
+    // webpack4.0版本以上采用MiniCssExtractPlugin 而不使用extract-text-webpack-plugin
     new MiniCssExtractPlugin({
       filename: utils.assetsPath('css/[name].[contenthash].css'),
       chunkFilename: utils.assetsPath('css/[name].[contenthash].css')
@@ -40,9 +41,8 @@ const pordWebpackConfig = merge(baseWebpackConfig, {
         removeAttributeQuotes: true
       }
     }),
-    // keep module.id stable when vendor modules does not change
+    //  当vendor模块不再改变时, 根据模块的相对路径生成一个四位数的hash作为模块id
     new webpack.HashedModuleIdsPlugin(),
-    // copy custom static assets
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../static'),
@@ -51,6 +51,7 @@ const pordWebpackConfig = merge(baseWebpackConfig, {
       }
     ])
   ],
+  // 优化相关, 暂时占个位置
   // optimization: {
   //   splitChunks: {
   //     chunks: 'all'

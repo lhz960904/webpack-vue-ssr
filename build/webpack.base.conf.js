@@ -1,10 +1,13 @@
 const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
+// vue-loader v15版本需要引入此插件
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
+// 用于返回文件相对于根目录的绝对路径
 const resolve = dir => path.posix.join(__dirname, '..', dir)
 
+// 创建ESlint相关rules
 const createLintingRule = () => ({
   test: /\.(js|vue)$/,
   loader: 'eslint-loader',
@@ -13,7 +16,7 @@ const createLintingRule = () => ({
   options: {
     // 更友好、更详细的提示
     formatter: require('eslint-friendly-formatter'),
-    // 只给出警告，开发有很好的体验，emitError会阻止浏览器显示内容
+    // 只给出警告，开发有很好的体验，emitError为true会阻止浏览器显示内容
     emitWarning: !config.dev.showEslintErrorsInOverlay
   }
 })
@@ -39,9 +42,12 @@ module.exports = {
     rules: [
       ...(config.dev.useEslint ? [createLintingRule()] : []),
       {
+        // 编译.vue文件, vue-cli2还包含vue-loader.conf.js,
+        // 但vue-loader15已经将大部分配置改为默认，所以没必要新建个文件
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
+          // 配置哪些引入路径按照模块方式查找
           transformAssetUrls: {
             video: ['src', 'poster'],
             source: 'src',
@@ -51,7 +57,7 @@ module.exports = {
         }
       },
       {
-        test: /\.js$/,
+        test: /\.js$/, // 利用babel-loader编译js，使用更高的特性，排除npm下载的.vue组件
         loader: 'babel-loader',
         exclude: file => (
           /node_modules/.test(file) &&

@@ -45,7 +45,9 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     }
   },
   plugins: [
+    // 热加载必备
     new webpack.HotModuleReplacementPlugin(),
+    // 模板
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'index.html',
@@ -68,12 +70,11 @@ module.exports = new Promise((resolve, reject) => {
     if (err) {
       reject(err)
     } else {
-      // publish the new Port, necessary for e2e tests
+      // port被占用会更改端口号
       process.env.PORT = port
-      // add port to devServer config
       devWebpackConfig.devServer.port = port
 
-      // Add FriendlyErrorsPlugin
+      // 添加友好提示错误的一个插件
       devWebpackConfig.plugins.push(new FriendlyErrorsPlugin({
         compilationSuccessInfo: {
           messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`],
