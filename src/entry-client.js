@@ -33,7 +33,6 @@ router.onReady(() => {
         return c.asyncData({ store, route: to })
       }
     })).then(() => {
-
       // 停止加载指示器(loading indicator)
 
       next()

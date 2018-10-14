@@ -3,7 +3,6 @@ import { createApp } from './app'
 export default context => {
   // 返回Promise 等待异步路由钩子函数或组件
   return new Promise((resolve, reject) => {
-
     const { app, router, store } = createApp()
 
     // 设置服务端router的位置
@@ -14,6 +13,7 @@ export default context => {
       const matchedComponents = router.getMatchedComponents()
       //  如果匹配不到, 返回404
       if (!matchedComponents.length) {
+        /* eslint-disable */
         return reject({ code: 404 })
       }
 
@@ -37,6 +37,4 @@ export default context => {
       }).catch(reject)
     }, reject)
   })
-
-  return app
 }

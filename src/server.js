@@ -1,5 +1,5 @@
 const Koa = require('koa')
-const path = require('path')
+// const path = require('path')
 const createApp = require('/path/to/built-server-bundle.js')
 const Router = require('koa-router')
 // const renderer = require('vue-server-renderer').createRenderer({
@@ -10,7 +10,6 @@ const app = new Koa()
 const router = new Router()
 
 router.get('*', (ctx, next) => {
-
   // const app = createApp(ctx)
 
   const context = { title: '访问' + ctx.url }
@@ -34,5 +33,4 @@ app
   .use(router.routes())
   .use(router.allowedMethods())
 
-
-app.listen(3000);
+app.lsten(3000)
