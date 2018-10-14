@@ -1,12 +1,12 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
-import A from 'components/A/A'
-import B from 'components/B/B'
+import Router from 'vue-router'
+const A = () => import('components/A/A')
+const B = () => import('components/B/B')
 
-Vue.use(VueRouter)
+Vue.use(Router)
 
-export default () => {
-  return new VueRouter({
+export function createRouter () {
+  return new Router({
     mode: 'history',
     linkActiveClass: 'active',
     linkExactActiveClass: 'exact-active',

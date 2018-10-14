@@ -1,7 +1,7 @@
 import Vue from 'vue'
-import createRouter from './router'
-import createStore from './store'
-import App from './App'
+import { createRouter } from './router'
+import { createStore } from './store'
+import App from './App.vue'
 
 import 'assets/styles/common.styl'
 

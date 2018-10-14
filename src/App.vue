@@ -13,6 +13,10 @@
 <script>
 export default {
   name: 'App',
+  asyncData ({ store, route }) {
+    // 触发 action 后，会返回 Promise
+    return store.dispatch('fetchCount', route.params.id)
+  },
   methods: {
     update () {
       const count = Math.round(Math.random() * 100)
