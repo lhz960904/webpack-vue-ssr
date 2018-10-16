@@ -16,7 +16,7 @@ if (isDev) {
   pageRouter = require('./routes/ssr')
 }
 
-app.use(async (ctx, next) => {
+app.use(async (ctx, next) => { 
   try {
     console.log(`request with path ${ctx.path}`)
     await next()
