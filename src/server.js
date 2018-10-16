@@ -2,13 +2,13 @@ const Koa = require('koa')
 const chalk = require('chalk')
 // const path = require('path')
 // const createApp = require('/path/to/built-server-bundle.js')
-const Router = require('koa-router')
+// const Router = require('koa-router')
 // const renderer = require('vue-server-renderer').createRenderer({
 //   template: require('fs').readFileSync(path.resolve(__dirname, '../index.template.html'), 'utf-8')
 // })
 
 const app = new Koa()
-const router = new Router()
+// const router = new Router()
 
 // router.get('*', (ctx, next) => {
 //   // const app = createApp(ctx)
@@ -37,7 +37,7 @@ app.use(async (ctx, next) => {
   } catch (error) {
     console.log(chalk.red(error))
     ctx.status = 500
-    ctx.body = err.message
+    ctx.body = error.message
   }
 })
 
