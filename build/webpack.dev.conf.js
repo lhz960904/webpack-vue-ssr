@@ -15,7 +15,9 @@ const PORT = process.env.PORT && Number(process.env.PORT)
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   mode: 'development',
-  entry: path.join(__dirname, '../src/entry-client.js')
+  entry: {
+    'app': path.join(__dirname, '../src/entry-client.js')
+  }
   module: {
     rules: utils.styleLoaders({
       sourceMap: config.dev.cssSourceMap,
