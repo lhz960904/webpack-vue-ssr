@@ -8,13 +8,7 @@
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "build": "node build/build.js",
-    "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.prod.conf.js",
-    "build:server": "cross-env NODE_ENV=production webpack --config build/webpack.server.conf.js",
-    "lint": "eslint --ext .js,.vue src",
-    "clean": "rimraf dist && rimraf server-dist",
-    "precommit": "yarn run lint",
-    "dev:server": "nodemon server/index.js",
-    "start": "cross-env NODE_ENV=production node server/index.js"
+    "lint": "eslint --ext .js,.vue src"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",
