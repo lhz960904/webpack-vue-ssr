@@ -6,7 +6,7 @@
   "author": "lihaozecq@gmail.com",
   "license": "MIT",
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev": "node server/index",
     "build": "node build/build.js",
     "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.prod.conf.js",
     "build:server": "cross-env NODE_ENV=production webpack --config build/webpack.server.conf.js",
