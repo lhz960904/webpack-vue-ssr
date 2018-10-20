@@ -4,14 +4,15 @@ const path = require('path')
 const chalk = require('chalk') // 控制台字符串颜色
 const webpack = require('webpack')
 const config = require('../config')
-const webpackConfig = require('./webpack.prod.conf')
+const clientWebpackConfig = require('./webpack.prod.conf')
+const serverWebpackConfig = require('./webpack.server.conf')
 
 const spinner = ora('building for production...').start()
 
 rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
   if (err) throw err
 
-  webpack(webpackConfig, (err, stats) => {
+  webpack(clientWebpackConfig, (err, stats) => {
     spinner.stop()
 
     // 输出到控制台
@@ -29,6 +30,7 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
       process.exit(1)
     }
 
-    console.log(chalk.cyan('Build complete.\n'))
+    console.log(chalk.cyan('clint Build complete.\n'))
   })
 })
+webpack(serverWebpackConfig)

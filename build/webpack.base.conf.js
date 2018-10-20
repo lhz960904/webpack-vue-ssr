@@ -3,6 +3,8 @@ const utils = require('./utils')
 const config = require('../config')
 // vue-loader v15版本需要引入此插件
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+// 服务端渲染用到的插件、默认生成JSON
+const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 
 // 用于返回文件相对于根目录的绝对路径
 const resolve = dir => path.posix.join(__dirname, '..', dir)
@@ -22,7 +24,7 @@ const createLintingRule = () => ({
 })
 
 module.exports = {
-  entry: resolve('src/main.js'),
+  entry: resolve('src/entry-client.js'),
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
@@ -87,7 +89,8 @@ module.exports = {
     ]
   },
   plugins: [
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+    new VueSSRClientPlugin()
   ],
   // 配置是否 polyfill 或 mock 某些 Node.js 全局变量和模块
   node: {
