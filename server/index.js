@@ -5,7 +5,7 @@ const chalk = require('chalk')
 const send = require('koa-send')
 const Router = require('koa-router')
 const { createBundleRenderer, createRenderer } = require('vue-server-renderer')
-// const setupDevServer = require('../build/setup-dev-server')
+const setupDevServer = require('../build/setup-dev-server')
 
 
 const app = new Koa()
@@ -23,29 +23,33 @@ const router = new Router()
 // })
 
 let renderer
-// let readyPromise
+let readyPromise
 
 const templatePath = path.resolve(__dirname, './index.template.html')
 template = fs.readFileSync(templatePath, 'utf-8')
 const serverBundle = require('../dist/vue-ssr-server-bundle.json')
 const clientManifest = require('../dist/vue-ssr-client-manifest.json')
 
-// readyPromise = setupDevServer(app, templatePath, (bundle, options) => {
-//   renderer = createBundleRenderer(bundle, {
-//       runInNewContext: false
-//     })
-//   }
-// )
+readyPromise = setupDevServer(app, templatePath, (bundle, options) => {
+  const option = Object.assign({
+    runInNewContext: false
+  }, options)
+  renderer = createBundleRenderer(bundle, {
+      runInNewContext: false,
+      option
+    })
+  }
+)
 // setupDevServer(app)
 
 
 const render = async (ctx, next) => {
 
-  renderer = createBundleRenderer(serverBundle, {
-    runInNewContext: false, // 推荐
-    template, // （可选）页面模板
-    clientManifest // （可选）客户端构建 manifest
-  })
+  // renderer = createBundleRenderer(serverBundle, {
+  //   runInNewContext: false, // 推荐
+  //   template, // （可选）页面模板
+  //   clientManifest // （可选）客户端构建 manifest
+  // })
 
   ctx.set('Content-Type', 'text/html')
 
@@ -82,7 +86,10 @@ router.get('/static/*', async (ctx, next) => {
   await send(ctx, ctx.path, { root: __dirname + '/../dist' });
 })
 
-router.get('*', render)
+router.get('*', async (ctx, next) => {
+  await readyPromise
+  await render
+})
 
 app
   .use(router.routes())

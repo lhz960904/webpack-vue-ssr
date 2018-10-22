@@ -16,7 +16,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   mode: 'development',
   entry: {
     'app': path.join(__dirname, '../src/entry-client.js')
-  }
+  },
   module: {
     rules: utils.styleLoaders({
       sourceMap: config.dev.cssSourceMap,
@@ -67,27 +67,28 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   ]
 })
 
-module.exports = new Promise((resolve, reject) => {
-  portfinder.basePort = process.env.PORT || config.dev.port
-  portfinder.getPort((err, port) => {
-    if (err) {
-      reject(err)
-    } else {
-      // port被占用会更改端口号
-      process.env.PORT = port
-      devWebpackConfig.devServer.port = port
+module.exports = devWebpackConfig
+// module.exports = new Promise((resolve, reject) => {
+//   portfinder.basePort = process.env.PORT || config.dev.port
+//   portfinder.getPort((err, port) => {
+//     if (err) {
+//       reject(err)
+//     } else {
+//       // port被占用会更改端口号
+//       process.env.PORT = port
+//       devWebpackConfig.devServer.port = port
 
-      // 添加友好提示错误的一个插件
-      devWebpackConfig.plugins.push(new FriendlyErrorsPlugin({
-        compilationSuccessInfo: {
-          messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`],
-        },
-        onErrors: config.dev.notifyOnErrors
-          ? utils.createNotifierCallback()
-          : undefined
-      }))
+//       // 添加友好提示错误的一个插件
+//       devWebpackConfig.plugins.push(new FriendlyErrorsPlugin({
+//         compilationSuccessInfo: {
+//           messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`],
+//         },
+//         onErrors: config.dev.notifyOnErrors
+//           ? utils.createNotifierCallback()
+//           : undefined
+//       }))
 
-      resolve(devWebpackConfig)
-    }
-  })
-})
+//       resolve(devWebpackConfig)
+//     }
+//   })
+// })

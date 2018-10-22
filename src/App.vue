@@ -2,6 +2,7 @@
   <div>
     <router-view/>
     <router-link :to="{ name: 'A' }" v-text="'to A'"/>
+    <p>tests1</p>
     <router-link :to="{ name: 'B' }" v-text="'to B'"/>
     <div class="store-example">
       <!-- <h3>{{ this.$store.state.count }}</h3> -->
@@ -19,6 +20,7 @@ export default {
   },
   methods: {
     update () {
+      /* eslint-disable */
       alert('hi')
       // const count = Math.round(Math.random() * 100)
       // this.$store.commit('updateCount', count)

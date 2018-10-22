@@ -54,9 +54,9 @@ module.exports = function setupDevServer(app, templatePath, cb) {
   // 编译clinetWebpack 插入Koa中间件
   const clientCompiler = webpack(clientConfig)
   app.use(webpackDevMiddleware(clientCompiler, {
-    publicPath: clientConfig.output.publicPath,
+    publicPath: clientConfig.output.publicPath
     // noInfo: true
-  })）
+  }))
 
   clientCompiler.plugin('done', stats => {
     stats = stats.toJson()
