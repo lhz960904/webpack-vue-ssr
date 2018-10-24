@@ -26,13 +26,10 @@ module.exports = function setupDevServer(app, templatePath, cb) {
   let template
   let clientManifest
 
-  let ready
-  const readyPromise = new Promise(r => { ready = r })
 
   // 监听改变后更新函数
   const update = () => {
     if (bundle && clientManifest) {
-      ready()
       cb(bundle, {
         template,
         clientManifest
@@ -40,11 +37,10 @@ module.exports = function setupDevServer(app, templatePath, cb) {
     }
   }
 
-  // 监听html模板改变
+  // 监听html模板改变、需手动刷新
   template = fs.readFileSync(templatePath, 'utf-8')
   chokidar.watch(templatePath).on('change', () => {
     template = fs.readFileSync(templatePath, 'utf-8')
-    console.log('index.html template updated.')
     update()
   })
 
@@ -87,6 +83,5 @@ module.exports = function setupDevServer(app, templatePath, cb) {
     update()
   })
 
-  return readyPromise
 }
 

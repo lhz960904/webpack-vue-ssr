@@ -4,6 +4,7 @@
     <router-link :to="{ name: 'A' }" v-text="'to A'"/>
     <router-link :to="{ name: 'B' }" v-text="'to B'"/>
     <div class="store-example">
+      <h1>h2sss</h1>
       <!-- <h3>{{ this.$store.state.count }}</h3> -->
       <button @click="update">updateCount</button>
     </div>

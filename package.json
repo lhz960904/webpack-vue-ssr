@@ -1,7 +1,7 @@
 {
   "name": "vue-ssr-todo",
   "version": "1.0.0",
-  "main": "src/main.js",
+  "main": "server/index.js",
   "repository": "https://github.com/lhz960904/vue-ssr-todo.git",
   "author": "lihaozecq@gmail.com",
   "license": "MIT",
@@ -11,8 +11,7 @@
     "build:client": "webpack --config build/webpack.prod.conf.js",
     "build:server": "webpack --config build/webpack.server.conf.js",
     "start": "node server/index.js",
-    "lint": "eslint --ext .js,.vue src",
-    "dev:server": "nodemon server/index.js"
+    "lint": "eslint --ext .js,.vue src"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",

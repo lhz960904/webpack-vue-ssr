@@ -11,17 +11,6 @@ const setupDevServer = require('../build/setup-dev-server')
 const app = new Koa()
 const router = new Router()
 
-// app.use(async (ctx, next) => {
-//   try {
-//     console.log(chalk.cyan(`request with path ${ctx.path}`))
-//     await next()
-//   } catch (error) {
-//     console.log(chalk.red(error))
-//     ctx.status = 500
-//     ctx.body = error.message
-//   }
-// })
-
 let renderer
 let readyPromise
 
@@ -30,7 +19,8 @@ template = fs.readFileSync(templatePath, 'utf-8')
 const serverBundle = require('../dist/vue-ssr-server-bundle.json')
 const clientManifest = require('../dist/vue-ssr-client-manifest.json')
 
-readyPromise = setupDevServer(app, templatePath, (bundle, options) => {
+setupDevServer(app, templatePath, (bundle, options) => {
+  console.log('重新bundle~~~~~')
   const option = Object.assign({
     runInNewContext: false
   }, options)
@@ -41,7 +31,6 @@ readyPromise = setupDevServer(app, templatePath, (bundle, options) => {
 
 
 const render = async (ctx, next) => {
-
   // renderer = createBundleRenderer(serverBundle, {
   //   runInNewContext: false, // 推荐
   //   template, // （可选）页面模板
@@ -77,17 +66,7 @@ const render = async (ctx, next) => {
 
 }
 
-// app.use(serve(__dirname, '/dist'))
-
-router.get('/static/*', async (ctx, next) => {
-  console.log(path.resolve(__dirname, '../dist'))
-  await send(ctx, ctx.path, { root: __dirname + '/../dist' });
-})
-
-router.get('*', async (ctx, next) => {
-  await readyPromise
-  await render
-})
+router.get('*', render)
 
 app
   .use(router.routes())
