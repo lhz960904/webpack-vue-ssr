@@ -34,10 +34,7 @@ readyPromise = setupDevServer(app, templatePath, (bundle, options) => {
   const option = Object.assign({
     runInNewContext: false
   }, options)
-  renderer = createBundleRenderer(bundle, {
-      runInNewContext: false,
-      option
-    })
+  renderer = createBundleRenderer(bundle, option)
   }
 )
 // setupDevServer(app)
@@ -55,6 +52,7 @@ const render = async (ctx, next) => {
 
   const handleError = err => {
     if (err.code === 404) {
+      console.log('---------------')
       ctx.status = 404
       ctx.body = '404 Page Not Found'
     } else {
@@ -66,7 +64,7 @@ const render = async (ctx, next) => {
   }
 
   const context = {
-    title: 'Vue-SSR-Demo',
+    title: 'Vue-SSR-Demos',
     url: ctx.url
   }
 

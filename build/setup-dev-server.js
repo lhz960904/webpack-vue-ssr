@@ -17,7 +17,7 @@ const readFile = (fs, file) => {
   try {
     return fs.readFileSync(path.join(clientConfig.output.path, file), 'utf-8')
   } catch (e) {
-    console.log(e)
+    console.log('读取文件错误：', e)
   }
 }
 
@@ -53,10 +53,11 @@ module.exports = function setupDevServer(app, templatePath, cb) {
 
   // 编译clinetWebpack 插入Koa中间件
   const clientCompiler = webpack(clientConfig)
-  app.use(webpackDevMiddleware(clientCompiler, {
-    publicPath: clientConfig.output.publicPath
-    // noInfo: true
-  }))
+  const devMiddleware = webpackDevMiddleware(clientCompiler, {
+    publicPath: clientConfig.output.publicPath,
+    noInfo: true
+  })
+  app.use(devMiddleware)
 
   clientCompiler.plugin('done', stats => {
     stats = stats.toJson()
