@@ -7,41 +7,48 @@ const Router = require('koa-router')
 const { createBundleRenderer, createRenderer } = require('vue-server-renderer')
 const setupDevServer = require('../build/setup-dev-server')
 
-
+//  第 1 步：创建koa、koa-router 实例
 const app = new Koa()
 const router = new Router()
 
 let renderer
-let readyPromise
-
 const templatePath = path.resolve(__dirname, './index.template.html')
-template = fs.readFileSync(templatePath, 'utf-8')
-const serverBundle = require('../dist/vue-ssr-server-bundle.json')
-const clientManifest = require('../dist/vue-ssr-client-manifest.json')
 
-setupDevServer(app, templatePath, (bundle, options) => {
-  console.log('重新bundle~~~~~')
-  const option = Object.assign({
-    runInNewContext: false
-  }, options)
-  renderer = createBundleRenderer(bundle, option)
+// 第 2步：根据环境变量生成不同BundleRenderer实例
+if (process.env.NODE_ENV === 'production') {
+  // 获取客户端、服务器端打包生成的json文件
+  console.log('生产')
+  const serverBundle = require('../dist/vue-ssr-server-bundle.json')
+  const clientManifest = require('../dist/vue-ssr-client-manifest.json')
+  // 赋值
+  renderer = createBundleRenderer(serverBundle, {
+    runInNewContext: false,
+    template: fs.readFileSync(templatePath, 'utf-8'),
+    clientManifest
+  })
+  // 静态资源
+  router.get('/static/*', async (ctx, next) => {
+    await send(ctx, ctx.path, { root: __dirname + '/../dist' });
+  })
+} else {
+  console.log('开发')
+  // 开发环境
+  setupDevServer(app, templatePath, (bundle, options) => {
+    console.log('重新bundle~~~~~')
+    const option = Object.assign({
+      runInNewContext: false
+    }, options)
+    renderer = createBundleRenderer(bundle, option)
   }
-)
-// setupDevServer(app)
+  )
+}
 
 
 const render = async (ctx, next) => {
-  // renderer = createBundleRenderer(serverBundle, {
-  //   runInNewContext: false, // 推荐
-  //   template, // （可选）页面模板
-  //   clientManifest // （可选）客户端构建 manifest
-  // })
-
   ctx.set('Content-Type', 'text/html')
 
   const handleError = err => {
     if (err.code === 404) {
-      console.log('---------------')
       ctx.status = 404
       ctx.body = '404 Page Not Found'
     } else {

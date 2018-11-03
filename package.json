@@ -10,7 +10,7 @@
     "build": "rimraf dist && npm run build:client && npm run build:server",
     "build:client": "webpack --config build/webpack.prod.conf.js",
     "build:server": "webpack --config build/webpack.server.conf.js",
-    "start": "node server/index.js",
+    "start": "cross-env NODE_ENV=production node server/index.js",
     "lint": "eslint --ext .js,.vue src"
   },
   "devDependencies": {
