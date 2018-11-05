@@ -9,7 +9,7 @@
 export default {
   asyncData ({ store, route }) {
     // 触发 action 后，会返回 Promise
-    return store.dispatch('fetchMovie', 26336252)
+    return store.dispatch('fetchMovie', 54321)
   },
   computed: {
     movie () {
