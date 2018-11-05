@@ -17,7 +17,6 @@ const templatePath = path.resolve(__dirname, './index.template.html')
 // 第 2步：根据环境变量生成不同BundleRenderer实例
 if (process.env.NODE_ENV === 'production') {
   // 获取客户端、服务器端打包生成的json文件
-  console.log('生产')
   const serverBundle = require('../dist/vue-ssr-server-bundle.json')
   const clientManifest = require('../dist/vue-ssr-client-manifest.json')
   // 赋值
@@ -31,7 +30,6 @@ if (process.env.NODE_ENV === 'production') {
     await send(ctx, ctx.path, { root: __dirname + '/../dist' });
   })
 } else {
-  console.log('开发')
   // 开发环境
   setupDevServer(app, templatePath, (bundle, options) => {
     console.log('重新bundle~~~~~')
@@ -65,6 +63,7 @@ const render = async (ctx, next) => {
   }
 
   try {
+    console.log('2', context.state)
     const html = await renderer.renderToString(context)
     ctx.body = html
   } catch (error) {

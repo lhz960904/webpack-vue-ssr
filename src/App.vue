@@ -4,8 +4,7 @@
     <router-link :to="{ name: 'A' }" v-text="'to A'"/>
     <router-link :to="{ name: 'B' }" v-text="'to B'"/>
     <div class="store-example">
-      <h1>h2sss</h1>
-      <!-- <h3>{{ this.$store.state.count }}</h3> -->
+      <h1>h2</h1>
       <button @click="update">updateCount</button>
     </div>
   </div>
@@ -14,16 +13,10 @@
 <script>
 export default {
   name: 'App',
-  asyncData ({ store, route }) {
-    // 触发 action 后，会返回 Promise
-    return store.dispatch('fetchCount', route.params.id)
-  },
   methods: {
     update () {
       /* eslint-disable */
       alert('hi')
-      // const count = Math.round(Math.random() * 100)
-      // this.$store.commit('updateCount', count)
     }
   }
 }
