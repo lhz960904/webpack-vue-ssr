@@ -2,10 +2,27 @@ const fs = require('fs')
 const Koa = require('koa')
 const path = require('path')
 const chalk = require('chalk')
+const LRU = require('lru-cache')
 const send = require('koa-send')
 const Router = require('koa-router')
-const { createBundleRenderer, createRenderer } = require('vue-server-renderer')
 const setupDevServer = require('../build/setup-dev-server')
+const { createBundleRenderer, createRenderer } = require('vue-server-renderer')
+
+// 缓存
+const microCache = LRU({
+  max: 100,
+  maxAge: 1000 * 60 // 重要提示：条目在 1 秒后过期。
+})
+
+const isCacheable = ctx => {
+  // 实现逻辑为，检查请求是否是用户特定(user-specific)。
+  // 只有非用户特定(non-user-specific)页面才会缓存
+  console.log(ctx.url)
+  if (ctx.url === '/b') {
+    return true
+  }
+  return false
+}
 
 //  第 1 步：创建koa、koa-router 实例
 const app = new Koa()
@@ -61,9 +78,24 @@ const render = async (ctx, next) => {
     url: ctx.url
   }
 
+  // 判断是否可缓存，可缓存并且缓存中有则直接返回
+  const cacheable = isCacheable(ctx)
+  if (cacheable) {
+    const hit = microCache.get(ctx.url)
+    if (hit) {
+      console.log('从缓存中取', hit)
+      return ctx.body = hit
+    }
+  }
+
   try {
     const html = await renderer.renderToString(context)
     ctx.body = html
+    if (cacheable) {
+      console.log('设置缓存: ', ctx.url)
+      console.log(microCache.set)
+      microCache.set(ctx.url, html)
+    }
   } catch (error) {
     handleError(error)
   }
