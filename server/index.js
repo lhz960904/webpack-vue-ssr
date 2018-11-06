@@ -58,12 +58,10 @@ const render = async (ctx, next) => {
   }
 
   const context = {
-    title: 'Vue-SSR-Demos',
     url: ctx.url
   }
 
   try {
-    console.log('2', context.state)
     const html = await renderer.renderToString(context)
     ctx.body = html
   } catch (error) {
