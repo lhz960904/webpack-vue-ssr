@@ -93,7 +93,6 @@ const render = async (ctx, next) => {
     ctx.body = html
     if (cacheable) {
       console.log('设置缓存: ', ctx.url)
-      console.log(microCache.set)
       microCache.set(ctx.url, html)
     }
   } catch (error) {
