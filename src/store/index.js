@@ -3,14 +3,25 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-export default () => {
+export function createStore () {
   return new Vuex.Store({
     state: {
-      count: 0
+      movie: {}
+    },
+    actions: {
+      fetchMovie ({ commit }, id) {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve({ id })
+          }, 500)
+        }).then(res => {
+          commit('setMoive', { res })
+        })
+      }
     },
     mutations: {
-      updateCount (state, num) {
-        state.count = num
+      setMoive (state, { res }) {
+        Vue.set(state, 'movie', res)
       }
     }
   })

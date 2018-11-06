@@ -3,6 +3,8 @@ const utils = require('./utils')
 const config = require('../config')
 // vue-loader v15版本需要引入此插件
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+// 服务端渲染用到的插件、默认生成JSON
+const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 
 // 用于返回文件相对于根目录的绝对路径
 const resolve = dir => path.posix.join(__dirname, '..', dir)
@@ -12,7 +14,7 @@ const createLintingRule = () => ({
   test: /\.(js|vue)$/,
   loader: 'eslint-loader',
   enforce: 'pre',
-  include: [resolve('src')],
+  include: [resolve('src'), resolve('server')],
   options: {
     // 更友好、更详细的提示
     formatter: require('eslint-friendly-formatter'),
@@ -22,7 +24,7 @@ const createLintingRule = () => ({
 })
 
 module.exports = {
-  entry: resolve('src/main.js'),
+  entry: resolve('src/entry-client.js'),
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
@@ -33,7 +35,6 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.vue'],
     alias: {
-      'vue': resolve('node_modules/vue/dist/vue.js'),
       'components': resolve('src/components'),
       'assets': resolve('src/assets')
     }
@@ -87,17 +88,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new VueLoaderPlugin()
-  ],
-  // 配置是否 polyfill 或 mock 某些 Node.js 全局变量和模块
-  node: {
-    // Vue源码已经包含了setImmediate
-    setImmediate: false,
-    // 设置empty是为了防止那些mock Node原生模块来对客户端造成安全问题
-    dgram: 'empty',
-    fs: 'empty',
-    net: 'empty',
-    tls: 'empty',
-    child_process: 'empty'
-  }
+    new VueLoaderPlugin(),
+    new VueSSRClientPlugin()
+  ]
 }

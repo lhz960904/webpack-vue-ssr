@@ -1,50 +1,115 @@
+const fs = require('fs')
 const Koa = require('koa')
-const send = require('koa-send')
-const app = new Koa()
 const path = require('path')
-const staticRouter = require('./routes/static')
+const chalk = require('chalk')
+const LRU = require('lru-cache')
+const send = require('koa-send')
+const Router = require('koa-router')
+const setupDevServer = require('../build/setup-dev-server')
+const { createBundleRenderer, createRenderer } = require('vue-server-renderer')
 
-const isDev = process.env.NODE_ENV === 'development'
+// 缓存
+const microCache = LRU({
+  max: 100,
+  maxAge: 1000 * 60 // 重要提示：条目在 1 秒后过期。
+})
 
-app.use(staticRouter.routes())
-  .use(staticRouter.allowedMethods())
-
-let pageRouter
-if (isDev) {
-  pageRouter = require('./routes/dev.ssr')
-} else {
-  pageRouter = require('./routes/ssr')
+const isCacheable = ctx => {
+  // 实现逻辑为，检查请求是否是用户特定(user-specific)。
+  // 只有非用户特定(non-user-specific)页面才会缓存
+  console.log(ctx.url)
+  if (ctx.url === '/b') {
+    return true
+  }
+  return false
 }
 
-app.use(async (ctx, next) => {
-  try {
-    console.log(`request with path ${ctx.path}`)
-    await next()
-  } catch (err) {
-    console.log(err)
-    ctx.status = 500
-    if (isDev) {
-      ctx.body = err.message
+//  第 1 步：创建koa、koa-router 实例
+const app = new Koa()
+const router = new Router()
+
+let renderer
+const templatePath = path.resolve(__dirname, './index.template.html')
+
+// 第 2步：根据环境变量生成不同BundleRenderer实例
+if (process.env.NODE_ENV === 'production') {
+  // 获取客户端、服务器端打包生成的json文件
+  const serverBundle = require('../dist/vue-ssr-server-bundle.json')
+  const clientManifest = require('../dist/vue-ssr-client-manifest.json')
+  // 赋值
+  renderer = createBundleRenderer(serverBundle, {
+    runInNewContext: false,
+    template: fs.readFileSync(templatePath, 'utf-8'),
+    clientManifest
+  })
+  // 静态资源
+  router.get('/static/*', async (ctx, next) => {
+    await send(ctx, ctx.path, { root: __dirname + '/../dist' });
+  })
+} else {
+  // 开发环境
+  setupDevServer(app, templatePath, (bundle, options) => {
+    console.log('重新bundle~~~~~')
+    const option = Object.assign({
+      runInNewContext: false
+    }, options)
+    renderer = createBundleRenderer(bundle, option)
+  }
+  )
+}
+
+
+const render = async (ctx, next) => {
+  ctx.set('Content-Type', 'text/html')
+
+  const handleError = err => {
+    if (err.code === 404) {
+      ctx.status = 404
+      ctx.body = '404 Page Not Found'
     } else {
-      ctx.body = 'please try again later'
+      ctx.status = 500
+      ctx.body = '500 Internal Server Error'
+      console.error(`error during render : ${ctx.url}`)
+      console.error(err.stack)
     }
   }
-})
 
-app.use(async (ctx, next) => {
-  if (ctx.path === '/favicon.ico') {
-    await send(ctx, '/favicon.ico', path.resolve(__dirname, '../'))
-  } else {
-    await next()
+  const context = {
+    url: ctx.url
   }
-})
 
-app.use(pageRouter.routes())
-  .use(pageRouter.allowedMethods())
+  // 判断是否可缓存，可缓存并且缓存中有则直接返回
+  const cacheable = isCacheable(ctx)
+  if (cacheable) {
+    const hit = microCache.get(ctx.url)
+    if (hit) {
+      console.log('从缓存中取', hit)
+      return ctx.body = hit
+    }
+  }
 
-const HOST = process.env.HOST || '0.0.0.0'
-const PORT = process.env.PORT || 3000
+  try {
+    const html = await renderer.renderToString(context)
+    ctx.body = html
+    if (cacheable) {
+      console.log('设置缓存: ', ctx.url)
+      microCache.set(ctx.url, html)
+    }
+  } catch (error) {
+    handleError(error)
+  }
 
-app.listen(PORT, HOST, () => {
-  console.log(`server is listening on ${HOST}:${PORT}`)
+}
+
+router.get('*', render)
+
+app
+  .use(router.routes())
+  .use(router.allowedMethods())
+
+
+
+const port = process.env.PORT || 3000
+app.listen(port, () => {
+  console.log(chalk.green(`server started at localhost:${port}`))
 })
