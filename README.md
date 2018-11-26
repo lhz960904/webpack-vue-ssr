@@ -53,7 +53,7 @@ export default {
 
 
 // store/index.js
-eturn new Vuex.Store({
+return new Vuex.Store({
   state: {
     movie: {}
   },
