@@ -1,5 +1,5 @@
 {
-  "name": "vue-ssr-todo",
+  "name": "webpack-vue-ssr",
   "version": "1.0.0",
   "main": "server/index.js",
   "repository": "https://github.com/lhz960904/vue-ssr-todo.git",
