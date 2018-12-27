@@ -6,7 +6,7 @@
 
 ## webpack-SPA
 
-[完整代码](https://github.com/lhz960904/webpack-vue-ssr/tree/webpack4-SPA)
+[完整代码](https://github.com/lhz960904/webpack-vue-ssr/tree/webpack4-SPA-v1.0)
 
 #### Usage:
 
@@ -24,7 +24,7 @@ npm run build # 线上构建
 
 ## webpack-SSR
 
-[完整代码](https://github.com/lhz960904/webpack-vue-ssr/tree/webpack-SSR)
+[完整代码](https://github.com/lhz960904/webpack-vue-ssr/tree/webpack-SSR-v1.0)
 
 #### Usage:
 
